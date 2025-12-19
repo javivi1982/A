@@ -109,6 +109,34 @@
         &copy; 2023 Javier - Licenciado en Física y Programador. Todos los derechos reservados.
     </footer>
 
+<pre id="respuesta"></pre>
+
+<script>
+async function preguntar() {
+  const pregunta = document.getElementById("pregunta").value;
+  const r = document.getElementById("respuesta");
+
+  r.textContent = "Pensando...";
+
+  try {
+    const res = await fetch(
+      "https://a-swart-omega.vercel.app/api/preguntar",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pregunta })
+      }
+    );
+
+    r.textContent = "Respuesta recibida, procesando...";
+    const data = await res.json();
+    r.textContent = data[0]?.generated_text || JSON.stringify(data);
+
+  } catch (e) {
+    r.textContent = "ERROR: " + e.message;
+  }
+}
+</script>
 
 
 </body>
