@@ -117,11 +117,26 @@
 async function preguntar() {
   const pregunta = document.getElementById("q").value;
 
-  const res = await fetch("/api/preguntar", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ pregunta })
-  });
+  const res = await fetch("https://a-swart-omega.vercel.app/api/preguntar", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    pregunta: pregunta
+  })
+})
+.then(res => res.json())
+.then(data => {
+  document.getElementById("respuesta").textContent =
+    data[0]?.generated_text || "Sin respuesta";
+})
+.catch(err => {
+  document.getElementById("respuesta").textContent =
+    "Error al consultar la IA";
+  console.error(err);
+});
+
 
   const data = await res.json();
   document.getElementById("r").textContent =
