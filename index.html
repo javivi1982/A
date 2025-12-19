@@ -111,12 +111,18 @@
 
 <pre id="respuesta"></pre>
 
+
+
+<input id="pregunta" placeholder="¿Qué propiedades tiene el arroz?" />
+<button onclick="preguntar()">Preguntar</button>
+
+<pre id="respuesta">Aquí saldrá la respuesta…</pre>
+
 <script>
 async function preguntar() {
   const pregunta = document.getElementById("pregunta").value;
-  const r = document.getElementById("respuesta");
 
-  r.textContent = "Pensando...";
+  document.getElementById("respuesta").textContent = "Pensando...";
 
   try {
     const res = await fetch(
@@ -128,12 +134,14 @@ async function preguntar() {
       }
     );
 
-    r.textContent = "Respuesta recibida, procesando...";
     const data = await res.json();
-    r.textContent = data[0]?.generated_text || JSON.stringify(data);
+    document.getElementById("respuesta").textContent =
+      JSON.stringify(data, null, 2);
 
   } catch (e) {
-    r.textContent = "ERROR: " + e.message;
+    document.getElementById("respuesta").textContent =
+      "Error al llamar a la API";
+    console.error(e);
   }
 }
 </script>
