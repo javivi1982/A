@@ -17,7 +17,7 @@ export default async function handler(req, res) {
   const { pregunta } = req.body;
 
   const response = await fetch(
-    "https://api-inference.huggingface.co/models/google/flan-t5-base",
+   "https://router.huggingface.co/models/google/flan-t5-base" ,
     {
       method: "POST",
       headers: {
