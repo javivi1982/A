@@ -17,7 +17,7 @@ export default async function handler(req, res) {
     const { pregunta } = req.body;
 
     const response = await fetch(
-      "https://router.huggingface.co/hf-inference/models/mistralai/Mistral-7B-Instruct-v0.2",
+      ""https://router.huggingface.co/hf-inference/models/HuggingFaceH4/zephyr-7b-beta",
       {
         method: "POST",
         headers: {
