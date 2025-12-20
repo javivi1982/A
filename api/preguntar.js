@@ -30,11 +30,23 @@ export default async function handler(req, res) {
       }
     );
 
-    const data = await response.json();
-    res.status(200).json(data);
+    const text = await response.text();
+
+    // Intentar convertir a JSON
+    try {
+      const json = JSON.parse(text);
+      return res.status(response.status).json(json);
+    } catch {
+      // Si NO es JSON, devolvemos el texto tal cual
+      return res.status(response.status).json({
+        ok: false,
+        status: response.status,
+        respuesta: text
+      });
+    }
 
   } catch (err) {
-    res.status(500).json({
+    return res.status(500).json({
       error: "Fallo en el servidor",
       detalle: err.message
     });
