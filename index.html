@@ -109,11 +109,18 @@
         &copy; 2023 Javier - Licenciado en Física y Programador. Todos los derechos reservados.
 	</footer>
 
+<h3>Pregunta a la IA</h3>
 
-<input id="pregunta" placeholder="¿Qué propiedades tiene el arroz?" />
+<input
+  id="pregunta"
+  type="text"
+  placeholder="¿Qué propiedades tiene el arroz?"
+  style="width: 80%;"
+/>
+
 <button onclick="preguntar()">Preguntar</button>
 
-<pre id="respuesta">Aquí saldrá la respuesta…</pre>
+<pre id="respuesta"></pre>
 
 <script>
 async function preguntar() {
@@ -122,26 +129,26 @@ async function preguntar() {
   document.getElementById("respuesta").textContent = "Pensando...";
 
   try {
-    const res = await fetch(
-      "https://a-swart-omega.vercel.app/api/preguntar",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pregunta })
-      }
-    );
+    const res = await fetch("https://a-swart-omega.vercel.app/api/preguntar", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ pregunta })
+    });
 
-    const data = await res.json();
-    document.getElementById("respuesta").textContent =
-      JSON.stringify(data, null, 2);
+    const texto = await res.text();
 
-  } catch (e) {
+    // DEBUG: muestra lo que llega aunque NO sea JSON
+    document.getElementById("respuesta").textContent = texto;
+
+  } catch (err) {
     document.getElementById("respuesta").textContent =
-      "Error al llamar a la API";
-    console.error(e);
+      "Error JS: " + err.message;
   }
 }
 </script>
+
 
 
 </body>
