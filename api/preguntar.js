@@ -1,23 +1,21 @@
 export default async function handler(req, res) {
-  // 👉 CABECERAS CORS (ESTO ES CLAVE)
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-
-  // 👉 Respuesta al preflight CORS
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
+  if (req.method !== "POST") {
+    return res.status(405).json({ ok: false, error: "Only POST allowed" });
   }
 
-  if (req.method !== "POST") {
-    return res.status(405).send("Only POST allowed");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
   }
 
   try {
     const { pregunta } = req.body;
 
     const hfResponse = await fetch(
-      "https://api-inference.huggingface.co/models/google/flan-t5-small",
+      "https://router.huggingface.co/hf-inference/models/google/flan-t5-base",
       {
         method: "POST",
         headers: {
@@ -32,9 +30,17 @@ export default async function handler(req, res) {
 
     const data = await hfResponse.json();
 
-    res.status(200).json({
+    let texto = "Sin respuesta";
+
+    if (Array.isArray(data) && data[0]?.generated_text) {
+      texto = data[0].generated_text;
+    } else if (data.generated_text) {
+      texto = data.generated_text;
+    }
+
+    res.json({
       ok: true,
-      respuesta: data[0]?.generated_text || "Sin respuesta"
+      respuesta: texto
     });
 
   } catch (error) {
