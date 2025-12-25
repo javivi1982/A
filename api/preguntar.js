@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     }
 
     const hfResponse = await fetch(
-      "https://router.huggingface.co/hf-inference/models/google/flan-t5-base",
+      "https://router.huggingface.co/models/google/flan-t5-base",
       {
         method: "POST",
         headers: {
