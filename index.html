@@ -129,7 +129,7 @@ async function preguntar() {
   document.getElementById("respuesta").textContent = "Pensando...";
 
   try {
-    const res = await fetch("https://a-swart-omega.vercel.app/api/preguntar", {
+    const res = await fetch("/api/preguntar", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
