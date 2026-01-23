@@ -1,4 +1,4 @@
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   if (req.method !== "POST") {
     return res.status(405).json({ ok: false, error: "Método no permitido" });
   }
@@ -15,12 +15,10 @@ export default async function handler(req, res) {
       {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${process.env.HF_API_KEY}`,
-          "Content-Type": "application/json"
+          Authorization: `Bearer ${process.env.HF_API_KEY}`,
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          inputs: pregunta
-        })
+        body: JSON.stringify({ inputs: pregunta }),
       }
     );
 
@@ -29,7 +27,7 @@ export default async function handler(req, res) {
       return res.status(500).json({
         ok: false,
         error: "Error en Hugging Face",
-        detalle: text
+        detalle: text,
       });
     }
 
@@ -41,13 +39,12 @@ export default async function handler(req, res) {
         : "No se pudo generar respuesta";
 
     res.status(200).json({ ok: true, respuesta });
-
   } catch (err) {
     res.status(500).json({
       ok: false,
       error: "Error interno",
-      detalle: err.message
+      detalle: err.message,
     });
   }
-}
+};
 
